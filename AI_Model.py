@@ -17,5 +17,5 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 print(model.summary())
 
-model.fit(save_db_info['train_x'], save_db_info['train_y'], epochs=50)
+model.fit(save_db_info['DB_x'], save_db_info['DB_y'], epochs=50)
 model.save_weights('model.h5')
