@@ -12,10 +12,10 @@ want_para = ['ZINST58', 'ZINST72', 'ZINST71', 'ZINST70',
              'WFWLN1', 'WFWLN2', 'WFWLN3']
 scaler = MinMaxScaler()
 
-for type_db, db_path in zip(['db', 'test'], ['./DB', './Test_DB']):
+for type_db, db_path in zip(['DB', 'Test_DB'], ['./DB', './Test_DB']):
     for file in os.listdir(db_path):
         if '.csv' in file:
-            csv_db = pd.read_csv(f'./DB/{file}', index_col=0)
+            csv_db = pd.read_csv(f'./{type_db}/{file}', index_col=0)
             get_xdb = csv_db[want_para]
             get_ydb = csv_db.loc[:, 'Normal_0'].to_numpy()
             accident_nub = {
