@@ -21,6 +21,7 @@ if get_shape == 3:
     model = k.Sequential([
         # k.layers.RNN(k.layers.SimpleRNNCell(32), input_shape=(get_time_seq, len(save_db_info['want_para']))),
         k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para']))),
+        # k.layers.Bidirectional(k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para'])))),
         k.layers.Flatten(),
         k.layers.Dense(128, activation='relu'),
         k.layers.Dense(4, activation='softmax')
@@ -38,10 +39,10 @@ else:
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-print(model.summary())
+# print(model.summary())
 model.load_weights('model.h5')
 
-result = model.predict(save_db_info['Test_DB_x_se']['(12, 300050, 20).csv'])
+result = model.predict(save_db_info['Test_DB_x_se']['(12, 100020, 35).csv'])
 plt.plot(result)
 plt.legend(['Normal', 'LOCA', 'SGTR', 'MSLB'])
 plt.show()
