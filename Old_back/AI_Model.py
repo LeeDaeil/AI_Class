@@ -1,17 +1,16 @@
 import pandas as pd
 import numpy as np
 import os
-import matplotlib.pyplot as plt
 import pickle
 import tensorflow.keras as k
 from sklearn.preprocessing import MinMaxScaler
-with open('Test_DB_info.pkl', 'rb') as f:
+with open('../db_info.pkl', 'rb') as f:
     save_db_info = pickle.load(f)
 
 print(save_db_info.keys())
 
-get_first_key = list(save_db_info['Test_DB_x_se'].keys())[0]
-sh = np.shape(save_db_info['Test_DB_x_se'][get_first_key])
+get_first_key = list(save_db_info['DB_x_se'].keys())[0]
+sh = np.shape(save_db_info['DB_x_se'][get_first_key])
 get_shape = len(sh)
 
 if get_shape == 3:
@@ -40,9 +39,10 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 # print(model.summary())
-model.load_weights('model.h5')
 
-result = model.predict(save_db_info['Test_DB_x_se']['(12, 100020, 35).csv'])
-plt.plot(result)
-plt.legend(['Normal', 'LOCA', 'SGTR', 'MSLB'])
-plt.show()
+if get_shape == 3:
+    model.fit(save_db_info['DB_x_seq'], save_db_info['DB_y_seq'], epochs=1)
+    model.save_weights('model.h5')
+else:
+    model.fit(save_db_info['DB_x'], save_db_info['DB_y'], epochs=50)
+    model.save_weights('model.h5')
