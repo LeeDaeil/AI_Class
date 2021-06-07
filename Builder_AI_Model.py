@@ -25,6 +25,8 @@ if get_shape == 3:
         k.layers.Flatten(),
         k.layers.Dense(128, activation='relu'),
         k.layers.Dense(256, activation='relu'),
+        k.layers.Dense(518, activation='relu'),
+        k.layers.Dense(256, activation='relu'),
         k.layers.Dense(128, activation='relu'),
         k.layers.Dense(5, activation='softmax')
     ])
