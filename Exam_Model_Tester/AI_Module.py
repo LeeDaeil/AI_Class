@@ -12,14 +12,14 @@ class AllAIModule:
 
     def predict(self, mem=None):
         model_outs = {}
-        for i, (m, s, ps) in enumerate(zip(self.models, self.scalers, self.paras)):
-            get_vals = [mem[p]['Val'] for p in ps]
-            get_normal_val = s.transform([get_vals])
+        for i in range(len(self.models)): # , (m, s, ps) in enumerate(zip(self.models, self.scalers, self.paras)):
+            get_vals = [mem[p]['Val'] for p in self.paras[i]]
+            get_normal_val = self.scalers[i].transform([get_vals])
 
             self.models_db[i].append(get_normal_val[0])
 
             if self.models_db[i].maxlen == len(self.models_db[i]):
-                o_ = m.predict(np.array([self.models_db[i]]))
+                o_ = self.models[i].predict(np.array([self.models_db[i]]))
                 print(i, o_.shape)
                 # if i in [100]:
                 #     model_outs[i] = [None for i in range(5)]
@@ -31,9 +31,9 @@ class AllAIModule:
 
     def _make_models(self):
         import tensorflow.keras as k
-        models = []
-        scalers = []
-        paras = []
+        models = {}
+        scalers = {}
+        paras = {}
         for file in os.listdir('./Model'):
             if 'pkl' in file:
                 get_model_nub = int(file.split('_')[3])
@@ -45,7 +45,7 @@ class AllAIModule:
                 sh = np.shape(save_db_info['DB_x_se'][get_first_key])
                 get_shape = len(sh)
 
-                if get_model_nub in [0, 1, 2, 3, 4, 5, 6]:
+                if get_model_nub in [0, 1, 2, 3, 4, 5]:# , 1, 2, 3, 4, 5, 6]:
                     if get_model_nub == 0:  # 승윤2
                         model_ = k.Sequential([
                             k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
@@ -129,10 +129,10 @@ class AllAIModule:
                     else:
                         raise ValueError('ALLAIModule : Error Cannot find Model.')
 
-                    paras.append(save_db_info['want_para'])
-                    scalers.append(save_db_info['scaler'])
+                    paras[get_model_nub] = save_db_info['want_para']
+                    scalers[get_model_nub] = save_db_info['scaler']
                     model_.load_weights(f'./Model/model_{get_model_nub}_.h5')
-                    models.append(model_)
+                    models[get_model_nub] = model_
                 else:
                     raise ValueError('ALLAIModule : Error Cannot find Model.')
             else:
