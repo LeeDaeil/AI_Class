@@ -25,13 +25,23 @@ class MainWindow(QWidget):
         # 요소 선언 -----------------------------------------------------------------------------------------------------
         # 1] 그래프
         self.fig = plt.Figure(tight_layout=True)
-        gs = GridSpec(8, 1, figure=self.fig)
+        gs = GridSpec(8, 3, figure=self.fig)
 
         self.axs = [
-            self.fig.add_subplot(gs[0:2, :]),
-            self.fig.add_subplot(gs[2:4, :]),
-            self.fig.add_subplot(gs[4:6, :]),
-            self.fig.add_subplot(gs[6:8, :]),
+            self.fig.add_subplot(gs[0:2, 0:1]),
+            self.fig.add_subplot(gs[2:4, 0:1]),
+            self.fig.add_subplot(gs[4:6, 0:1]),
+            self.fig.add_subplot(gs[6:8, 0:1]),
+
+            self.fig.add_subplot(gs[0:2, 1:2]),
+            self.fig.add_subplot(gs[2:4, 1:2]),
+            self.fig.add_subplot(gs[4:6, 1:2]),
+            self.fig.add_subplot(gs[6:8, 1:2]),
+
+            self.fig.add_subplot(gs[0:2, 2:3]),
+            self.fig.add_subplot(gs[2:4, 2:3]),
+            self.fig.add_subplot(gs[4:6, 2:3]),
+            self.fig.add_subplot(gs[6:8, 2:3]),
         ]
 
         self.fig.canvas.draw()
