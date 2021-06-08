@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
+
 class MainWindow(QWidget):
     """메인 윈도우"""
     def __init__(self, parnet=None, mem=None):
@@ -43,7 +44,13 @@ class MainWindow(QWidget):
             self.fig.add_subplot(gs[4:6, 2:3]),
             self.fig.add_subplot(gs[6:8, 2:3]),
         ]
-
+        self.title_pack = [
+            # 'CH', 'SH', 'S1', 'DH',
+            # 'SY2', 'SJ2', 'CJ', '',
+            'SY', 'S1', 'DH', 'SH',
+            'CH', 'CJ', 'SJ', '',
+            '', '', '', '',
+        ]
         self.fig.canvas.draw()
         self.canvas = FigureCanvasQTAgg(self.fig)
 
@@ -71,9 +78,9 @@ class MainWindow(QWidget):
                 getx = m[i]
                 gety = [i for i in range(len(getx))]
                 self.axs[i].plot(gety, getx)
-                self.axs[i].legend(['Normal', 'LOCA', 'SGTR', 'MSLB', 'MSLB-non'], loc=1)
+                self.axs[i].legend(['Normal', 'LOCA', 'SGTR', 'MSLB', 'MSLB-non'], loc=1, fontsize=7)
                 self.axs[i].grid()
-
+                self.axs[i].set_title(self.title_pack[i])
         self.canvas.draw()
 
 

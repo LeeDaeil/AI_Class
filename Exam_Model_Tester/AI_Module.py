@@ -20,6 +20,10 @@ class AllAIModule:
 
             if self.models_db[i].maxlen == len(self.models_db[i]):
                 o_ = m.predict(np.array([self.models_db[i]]))
+                print(i, o_.shape)
+                # if i in [100]:
+                #     model_outs[i] = [None for i in range(5)]
+                # else:
                 model_outs[i] = o_.reshape(5).tolist()
             else:
                 model_outs[i] = [None for i in range(5)]
@@ -41,34 +45,20 @@ class AllAIModule:
                 sh = np.shape(save_db_info['DB_x_se'][get_first_key])
                 get_shape = len(sh)
 
-                if get_model_nub in [0, 1, 2, 3, 4, 5]:
-                    if get_model_nub == 0:        # 창상
+                if get_model_nub in [0, 1, 2, 3, 4, 5, 6]:
+                    if get_model_nub == 0:  # 승윤2
                         model_ = k.Sequential([
-                            # k.layers.RNN(k.layers.SimpleRNNCell(32), input_shape=(get_time_seq, len(save_db_info['want_para']))),
                             k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
-                            # k.layers.Bidirectional(k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para'])))),
                             k.layers.Flatten(),
-                            k.layers.Dense(128, activation='relu'),
-                            k.layers.Dense(256, activation='relu'),
-                            k.layers.Dense(518, activation='relu'),
-                            k.layers.Dense(256, activation='relu'),
-                            k.layers.Dense(128, activation='relu'),
+                            k.layers.Dense(300, activation='relu'),
+                            k.layers.Dense(200, activation='relu'),
                             k.layers.Dense(128, activation='relu'),
                             k.layers.Dense(5, activation='softmax')
                         ])
                         self.models_db[get_model_nub] = deque(maxlen=sh[1])
-                    elif get_model_nub == 1:        # 상현
+                    elif get_model_nub == 1:  # 상원
                         model_ = k.Sequential([
-                            k.layers.GRU(128, input_shape=(3, len(save_db_info['want_para'])), return_sequences=True),
-                            k.layers.GRU(64, activation='relu'),
-                            k.layers.Dense(5, activation='softmax')
-                        ])
-                        self.models_db[get_model_nub] = deque(maxlen=3)
-                    elif get_model_nub == 2:  # 상원
-                        model_ = k.Sequential([
-                            # k.layers.RNN(k.layers.SimpleRNNCell(32), input_shape=(get_time_seq, len(save_db_info['want_para']))),
                             k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
-                            # k.layers.Bidirectional(k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para'])))),
                             k.layers.Flatten(),
                             k.layers.Dense(128, activation='relu'),
                             k.layers.Dropout(0.5),
@@ -83,7 +73,7 @@ class AllAIModule:
                             k.layers.Dense(5, activation='softmax')
                         ])
                         self.models_db[get_model_nub] = deque(maxlen=sh[1])
-                    elif get_model_nub == 3:    # 두헌
+                    elif get_model_nub == 2:  # 두헌
                         model_ = k.Sequential([
                             k.layers.InputLayer(input_shape=len(save_db_info['want_para'])),
                             k.layers.Dense(64, activation='relu'),
@@ -92,17 +82,39 @@ class AllAIModule:
                             k.layers.Dense(5, activation='softmax')
                         ])
                         self.models_db[get_model_nub] = deque(maxlen=1)
-                    elif get_model_nub == 4:        # 승윤 2
+                    elif get_model_nub == 3:    # 상현
                         model_ = k.Sequential([
-                                k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
-                                k.layers.Flatten(),
-                                k.layers.Dense(300, activation='relu'),
-                                k.layers.Dense(200, activation='relu'),
-                                k.layers.Dense(128, activation='relu'),
-                                k.layers.Dense(5, activation='softmax')
-                            ])
+                            k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para'])),
+                                          return_sequences=True),
+                            k.layers.LSTM(32),
+                            k.layers.Dense(5, activation='softmax')
+                            # model.add(Activation('tanh'))
+                        ])
                         self.models_db[get_model_nub] = deque(maxlen=sh[1])
-                    elif get_model_nub == 5:        # 선준 2
+                    elif get_model_nub == 4:  # 창상
+                        model_ = k.Sequential([
+                            k.layers.InputLayer(input_shape=len(save_db_info['want_para'])),
+                            k.layers.Dense(128, activation='relu'),
+                            k.layers.Dense(256, activation='relu'),
+                            k.layers.Dense(128, activation='relu'),
+                            k.layers.Dense(5, activation='softmax')
+                        ])
+                        self.models_db[get_model_nub] = deque(maxlen=1)
+                    elif get_model_nub == 5:    # 창주
+                        model_ = k.Sequential([
+                            # k.layers.RNN(k.layers.SimpleRNNCell(32), input_shape=(get_time_seq, len(save_db_info['want_para']))),
+                            k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
+                            # k.layers.Bidirectional(k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para'])))),
+                            k.layers.Flatten(),
+                            k.layers.Dense(128, activation='relu'),
+                            k.layers.Dense(256, activation='relu'),
+                            k.layers.Dense(518, activation='relu'),
+                            k.layers.Dense(256, activation='relu'),
+                            k.layers.Dense(128, activation='relu'),
+                            k.layers.Dense(5, activation='softmax')
+                        ])
+                        self.models_db[get_model_nub] = deque(maxlen=sh[1])
+                    elif get_model_nub == 6:        # 선준 2
                         model_ = k.Sequential([
                             k.layers.LSTM(32, input_shape=(sh[1], len(save_db_info['want_para']))),
                             k.layers.Flatten(),
