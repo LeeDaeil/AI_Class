@@ -24,6 +24,7 @@ if get_shape == 3:
         # k.layers.Bidirectional(k.layers.LSTM(32, input_shape=(get_time_seq, len(save_db_info['want_para'])))),
         k.layers.Flatten(),
         k.layers.Dense(128, activation='relu'),
+        k.layers.LayerNormalization(),
         k.layers.Dense(256, activation='relu'),
         k.layers.Dense(518, activation='relu'),
         k.layers.Dense(256, activation='relu'),
@@ -46,7 +47,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 print(model.summary())
 
-model.fit(save_db_info['DB_x'], save_db_info['DB_y'], epochs=50)
+model.fit(save_db_info['DB_x'], save_db_info['DB_y'], epochs=1)
 model.save_weights('model.h5')
 # model.load_weights('model.h5')
 

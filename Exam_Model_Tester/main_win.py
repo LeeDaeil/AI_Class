@@ -26,30 +26,24 @@ class MainWindow(QWidget):
         # 요소 선언 -----------------------------------------------------------------------------------------------------
         # 1] 그래프
         self.fig = plt.Figure(tight_layout=True)
-        gs = GridSpec(8, 3, figure=self.fig)
+        gs = GridSpec(5, 2, figure=self.fig)
 
         self.axs = [
-            self.fig.add_subplot(gs[0:2, 0:1]),
-            self.fig.add_subplot(gs[2:4, 0:1]),
-            self.fig.add_subplot(gs[4:6, 0:1]),
-            self.fig.add_subplot(gs[6:8, 0:1]),
+            self.fig.add_subplot(gs[0:1, 0:1]),
+            self.fig.add_subplot(gs[1:2, 0:1]),
+            self.fig.add_subplot(gs[2:3, 0:1]),
+            self.fig.add_subplot(gs[3:4, 0:1]),
+            self.fig.add_subplot(gs[4:5, 0:1]),
 
-            self.fig.add_subplot(gs[0:2, 1:2]),
-            self.fig.add_subplot(gs[2:4, 1:2]),
-            self.fig.add_subplot(gs[4:6, 1:2]),
-            self.fig.add_subplot(gs[6:8, 1:2]),
-
-            self.fig.add_subplot(gs[0:2, 2:3]),
-            self.fig.add_subplot(gs[2:4, 2:3]),
-            self.fig.add_subplot(gs[4:6, 2:3]),
-            self.fig.add_subplot(gs[6:8, 2:3]),
+            self.fig.add_subplot(gs[0:1, 1:2]),
+            self.fig.add_subplot(gs[1:2, 1:2]),
+            self.fig.add_subplot(gs[2:3, 1:2]),
+            self.fig.add_subplot(gs[3:4, 1:2]),
+            self.fig.add_subplot(gs[4:5, 1:2]),
         ]
         self.title_pack = [
-            # 'CH', 'SH', 'S1', 'DH',
-            # 'SY2', 'SJ2', 'CJ', '',
-            'SY', 'S1', 'DH', 'SH',
-            'CH', 'CJ', 'SJ', '',
-            '', '', '', '',
+            'SY', 'S1', 'DH', 'SH', 'CH',
+            'CJ', 'SJ', 'KSC', 'JY', '',
         ]
         self.fig.canvas.draw()
         self.canvas = FigureCanvasQTAgg(self.fig)
@@ -75,9 +69,12 @@ class MainWindow(QWidget):
             for i in range(len(m)):
                 self.axs[i].clear()
 
-                getx = m[i]
-                gety = [i for i in range(len(getx))]
-                self.axs[i].plot(gety, getx)
+                gety = m[i]
+                getx = [i for i in range(len(gety))]
+
+                self.axs[i].set_xlim(0, max(getx) + 1)
+
+                self.axs[i].plot(getx, gety)
                 self.axs[i].legend(['Normal', 'LOCA', 'SGTR', 'MSLB', 'MSLB-non'], loc=1, fontsize=7)
                 self.axs[i].grid()
                 self.axs[i].set_title(self.title_pack[i])
